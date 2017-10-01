@@ -32,7 +32,7 @@ class SinglyList {
 
   searchNodeAt(position) {
     let currentNode = this.head;
-    let count = 0;
+    let count = 1;
 
     if (position < 1 || position > this.length || this.length === 0) {
       throw Error('Unable to retrieve a node for this position.')
@@ -48,12 +48,12 @@ class SinglyList {
 
   remove(position) {
     let currentNode = this.head;
-    let count = 0;
+    let count = 1;
     let beforeNodeToDelete = null;
     let nodeToDelete = null;
     let deletedNode = null;
 
-    if (position < 0 || position > this.length) {
+    if (position < 1 || position > this.length) {
       throw new Error('Position given is out of range.')
     }
 
@@ -88,6 +88,8 @@ ll.add(1);
 ll.add(2);
 ll.add(3);
 ll.add(4);
-ll.remove(3);
-console.log('Node at position 2:', ll.searchNodeAt(2));
-console.log('Singly list after last removed:', JSON.stringify(ll, null, 3));
+ll.remove(4);
+ll.remove(1);
+console.log('Node at position 2:', ll.searchNodeAt(2)); // should be "3"
+ll.remove(2);
+console.log('Singly list after first, next, and last removed:', JSON.stringify(ll, null, 3)); // should be "2"
