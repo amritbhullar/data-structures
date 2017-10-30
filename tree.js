@@ -6,32 +6,6 @@ class Node {
   }
 }
 
-class Queue {
-  constructor() {
-    this.oldestIndex = 1;
-    this.newestIndex = 1;
-    this.storage = {};
-  }
-
-  size() {
-    return this.newestIndex - this.oldestIndex;
-  }
-
-  enqueue(data) {
-    this.storage[this.newestIndex] = data;
-    this.newestIndex ++;
-  }
-
-  dequeue() {
-    if (this.oldestIndex !== this.newestIndex) {
-      let dequeued = this.storage[this.oldestIndex];
-      delete this.storage[this.oldestIndex];
-      this.oldestIndex ++;
-      return dequeued;
-    }
-  }
-}
-
 class Tree {
   constructor(data) {
     const node = new Node(data);
@@ -50,18 +24,18 @@ class Tree {
   }
 
   traverseBF(callback) {
-    var queue = new Queue();
-    queue.enqueue(tree.root);
-    let currentTree = queue.dequeue();
+    var queue = [];
+    queue.push(tree.root);
+    let currentTree = queue.pop();
 
     while (currentTree) {
       let length = currentTree.children.length;
       for (var i=0; i < length; i++) {
-        queue.enqueue(currentTree.children[i])
+        queue.push(currentTree.children[i])
       }
 
       callback(currentTree);
-      currentTree = queue.dequeue();
+      currentTree = queue.pop();
     }
   }
 
@@ -89,7 +63,6 @@ class Tree {
   }
 
   remove(data, fromData, traversal) {
-    let tree = this;
     let parent = null;
     let childToRemove = null;
     let index;
@@ -103,7 +76,7 @@ class Tree {
     this.contains(callback, traversal);
 
     if (parent) {
-      const index = findIndex(parent.children, data);
+      const index = parent.children.indexOf(data);
       if (index === undefined) {
         throw new Error('Node to remove does not exist.')
       } else {
@@ -112,22 +85,12 @@ class Tree {
     } else {
       throw new Error('Parent node does not exist.')
     }
-    return childToRemove;
-  }
 
-  findIndex(arr, data) {
-    let index;
-    for (var i=0; i < arr.length; i++) {
-      if (arr[i].data === data) {
-        index = i;
-      }
-    }
-    return index;
+    return childToRemove;
   }
 }
 
 var tree = new Tree('one');
-console.log(tree.root);
 tree.root.children.push(new Node('two'));
 tree.root.children[0].parent = tree;
 tree.root.children.push(new Node('three'));
@@ -138,6 +101,12 @@ tree.root.children[2].parent = tree;
 tree.root.children[0].children.push(new Node('five'));
 tree.root.children[0].children[0].parent = tree.root.children[0];
 
+// one, four, three, two, five
+tree.traverseBF(function(node) {
+  console.log(node.data)
+});
+
+// five, two, three, four, one
 tree.traverseDF(function(node) {
   console.log(node.data)
 })

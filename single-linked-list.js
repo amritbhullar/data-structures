@@ -79,6 +79,23 @@ class SinglyList {
 
     return deletedNode;
   }
+
+  deleteDuplicates() {
+    let currentNode = this.head;
+    let previous = null;
+    let collection = {};
+    while (currentNode) {
+      if (collection[currentNode.data]) {
+        console.log('is in collection')
+        previous.next = currentNode.next;
+      } else {
+        collection[currentNode.data] = 1;
+        previous = currentNode;
+      }
+      currentNode = currentNode.next;
+    }
+    return currentNode;
+  }
 };
 
 
@@ -93,3 +110,9 @@ ll.remove(1);
 console.log('Node at position 2:', ll.searchNodeAt(2)); // should be "3"
 ll.remove(2);
 console.log('Singly list after first, next, and last removed:', JSON.stringify(ll, null, 3)); // should be "2"
+console.log('-----');
+ll.add(2);
+ll.add(2);
+ll.add(2);
+ll.deleteDuplicates();
+console.log(ll)
